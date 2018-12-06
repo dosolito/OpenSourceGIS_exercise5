@@ -26,7 +26,7 @@ import os
 
 def main():
 
-    
+
 
     # Path to the folder containing that data sets
     path_data = "C:/FOSSGIS/OpenSourceGIS_exercise5/data"
@@ -40,19 +40,23 @@ def main():
     gscript.run_command('g.region', vect='studyarea', align='rainfall@PERMANENT')
 
 
-    '''
+
 
     # 1. Calculate average rainfall within the study area 
     # ----------------------------------------------------
-    gscript.run_command('v.rast.stats', flags='c', map='studyarea', raster='rainfall@PERMANENT', column_prefix='rf', method='average,minimum')
+    gscript.run_command('v.rast.stats', flags='c', map='studyarea', raster='rainfall@PERMANENT', column_prefix='rf', method='average,minimum,maximum')
     
     # Read and print value of column "rf_average"
     rf_average = gscript.read_command('v.db.select', map='studyarea', columns='rf_average')
     print("Average rainfall: " + rf_average.split("\n")[1])
     # Read and print value of column "rf_minimum" 
     rf_minimum = gscript.read_command('v.db.select', map='studyarea', columns='rf_minimum')
-    print("Minimum rainfall: " + rf_minimum.split("\n")[1])
+    print("Minimum rainfall: " + rf_minimum.split("\n")[1])
+    # Read and print value of column "rf_maximum" 
+    rf_maximum = gscript.read_command('v.db.select', map='studyarea', columns='rf_maximum')
+    print("Maximum rainfall: " + rf_maximum.split("\n")[1])
 
+    '''
 
     # 2. Calculate number of hostels in Auckland 
     #---------------------------------------------
