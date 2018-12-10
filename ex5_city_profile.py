@@ -120,27 +120,29 @@ def main():
 
     # Print the summary statistics for the column 'length'
     cyclewaysStatistics = gscript.read_command('v.db.univar', map='cyclewaysInStudyarea', column='length')
-    print("Total length of cycleways: " + cyclewaysStatistics.split("\n")[9] + " km")
+    print("Total length of cycleways: " + cyclewaysStatistics.split("\n")[9] + " km")
+
+    
 
 
     # 4. Find the nearby airports 
     # ----------------------------
 
     # Calculate distances to all airports (in meters)
-    # gscript.run_command("v.distance", from="studyarea@vacation2", to="airports@PERMANENT", output="airport_distances", upload="dist,to_attr", column="airport,airport_distance", to_column="str_1", table="airport_distances", flags="a")
+    gscript.run_command("v.distance", from="studyarea@exercise_five", to="airports@PERMANENT", output="airport_distances", upload="dist,to_attr", column="airport,airport_distance", to_column="str_1", table="airport_distances", flags="a"
     # the command above does not work due to a bug. Therefore we use subprocess.call() instead
     subprocess.call(["v.distance", "-a", "from=studyarea", "to=airports@PERMANENT", "output=airport_distances", "upload=dist,to_attr", "column=airport_distance,airport", "from_type=centroid", "to_column=str_1", "table=airport_distances"])
     # If the subprocess doesn't work either (likely on windows), execute the following command manually in the GRASS GIS console 
     # v.distance -a from=studyarea to=airports@PERMANENT output=airport_distances upload=dist,to_attr column=airport_distance,airport from_type=centroid to_column=str_1 table=airport_distances
-
+    '''
     # Select and print airports that are within a 100 km radius (calculation of distance in meters)
-    nearbyAirports = gscript.read_command('v.db.select', map='airport_distances', columns='airport,airport_distance', where='airport_distance <= 50000')
+    nearbyAirports = gscript.read_command('v.db.select', map='airport_distances', columns='airport,airport_distance', where='airport_distance <= 100000')
     print("Nearby airports (<100km): \n" + nearbyAirports)
 
     # Export airport distances to file 
-    path_out_airportdistances = os.path.join(path_data, 'airport_distances.shp')
-    gscript.run_command('v.out.ogr', input='airport_distances', output=path_out_airportdistances, format='ESRI_Shapefile')
-    '''
+    path_out_airportdistances = os.path.join(path_data, 'airport_distances.geojson')
+    gscript.run_command('v.out.ogr', input='airport_distances', output=path_out_airportdistances, format='GeoJSON')
+
 
 if __name__ == '__main__':
     main()
