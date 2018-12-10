@@ -100,7 +100,6 @@ def main():
     NumberOfBars = gscript.read_command('v.vect.stats', flags='p', points='bars', areas='studyarea', type='point,centroid')
     print("Number of bars: " + NumberOfBars.split('|')[2])
 
-    '''
     
     # 3. Calculate total length of cycleways 
     # ----------------------------------------
@@ -116,13 +115,13 @@ def main():
     gscript.run_command('v.db.addcolumn', map='cyclewaysInStudyarea', columns='length double precision')
 
     # Calculate the length of each cycleway and store the result in the column 'length'
-    gscript.run_command('v.to.db', map='cyclewaysInStudyarea', type='line', option='length', columns='length', units='kilometers')
+    gscript.run_command('v.to.db', map='cyclewaysInStudyarea', type='line', option='length', columns='length', units='miles')
 
     # Print the summary statistics for the column 'length'
     cyclewaysStatistics = gscript.read_command('v.db.univar', map='cyclewaysInStudyarea', column='length')
-    print("Total length of cycleways: " + cyclewaysStatistics.split("\n")[9] + " km")
+    print("Total length of cycleways: " + cyclewaysStatistics.split("\n")[9] + " miles")
 
-    
+    '''
 
 
     # 4. Find the nearby airports 
