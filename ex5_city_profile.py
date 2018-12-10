@@ -56,7 +56,7 @@ def main():
     rf_maximum = gscript.read_command('v.db.select', map='studyarea', columns='rf_maximum')
     print("Maximum rainfall: " + rf_maximum.split("\n")[1])
 
-    '''
+    
 
     # 2. Calculate number of hostels in Auckland 
     #---------------------------------------------
@@ -78,13 +78,30 @@ def main():
     # Count the hostels within the study area
     NumberOfHostels = gscript.read_command('v.vect.stats', flags='p', points='hostels', areas='studyarea', type='point,centroid')
     print("Number of hostels: " + NumberOfHostels.split('|')[2])
+    
+    
 
-    # 2.1 Calculate number of Pubs in Auckland using osm_pubs.geojson
+    # 2.1 Calculate number of Bars(Pubs) in Auckland using osm_bars.geojson (osm_pubs.geojson)
     #-----------------------------------------------------------------
 
-    # add code here ....
+    # add code here ....
 
-
+    # Path to data set containing osm_bars
+    path_osm_bars = os.path.join(path_data, 'osm_bars.geojson')
+    
+    # Reproject the data set
+    path_osm_bars_reprojected = os.path.join(path_data, 'osm_bars_reprojected.geojson')
+    subprocess.call(['ogr2ogr', '-f', 'geojson', '-t_srs', 'EPSG:32760', path_osm_bars_reprojected, path_osm_bars])
+
+     # Importing the reprojected data set using v.in.ogr to be able to set the "where" parameter
+    gscript.run_command('v.in.ogr', input =path_osm_bars_reprojected, layer='osm_bars', output='bars', where="amenity='bar'")
+
+    # Count the bars within the study area
+    NumberOfBars = gscript.read_command('v.vect.stats', flags='p', points='bars', areas='studyarea', type='point,centroid')
+    print("Number of bars: " + NumberOfBars.split('|')[2])
+
+    '''
+    
     # 3. Calculate total length of cycleways 
     # ----------------------------------------
 
